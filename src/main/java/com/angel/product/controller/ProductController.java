@@ -51,8 +51,11 @@ public class ProductController {
     @PutMapping("update/{productId}")
     public ResponseEntity<Object> updateProductById ( @Valid @PathVariable("productId")  UUID productId, @RequestBody ProductDTO productDTO) {
 
-
         var updateProduct = productService.updateProductById(productId, productDTO);
+        if (updateProduct.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
 
     }

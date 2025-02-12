@@ -33,19 +33,15 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public ProductEntity updateProductById ( UUID id,  ProductDTO productDTO) {
+    public Optional<ProductEntity> updateProductById ( UUID id,  ProductDTO productDTO) {
 
         var productId = productRepository.findById(id);
-        if (productId.isEmpty()) {
-            throw new RuntimeException("Product not found");
-        }
-
-        var product = productId.get();
-        BeanUtils.copyProperties(productDTO, product);
-        productRepository.save(product);
 
 
-        return product;
+        BeanUtils.copyProperties(productDTO, productId.get());
+        productRepository.save(productId.get());
+
+        return productId;
     }
 
 }
