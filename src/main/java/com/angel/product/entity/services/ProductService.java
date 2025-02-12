@@ -37,11 +37,18 @@ public class ProductService {
 
         var productId = productRepository.findById(id);
 
-
         BeanUtils.copyProperties(productDTO, productId.get());
         productRepository.save(productId.get());
 
         return productId;
+    }
+
+    public Optional<ProductEntity> deleteProductById (UUID productId) {
+         var product = productRepository.findById(productId);
+
+         productRepository.delete(product.get());
+
+         return product;
     }
 
 }
