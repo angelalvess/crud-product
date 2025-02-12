@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,5 +29,23 @@ public class ProductService {
 
     }
 
+    public List<ProductEntity> getAllProducts(){
+        return productRepository.findAll();
+    }
+
+    public ProductEntity updateProductById ( UUID id,  ProductDTO productDTO) {
+
+        var productId = productRepository.findById(id);
+        if (productId.isEmpty()) {
+            throw new RuntimeException("Product not found");
+        }
+
+        var product = productId.get();
+        BeanUtils.copyProperties(productDTO, product);
+        productRepository.save(product);
+
+
+        return product;
+    }
 
 }
